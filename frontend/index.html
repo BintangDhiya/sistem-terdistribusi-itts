@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Catatan Harian</title>
+</head>
+<body>
+    <h1>Catatan Harian</h1>
+    <form id="note-form">
+        <textarea id="note" rows="5" cols="50" placeholder="Tulis catatan..."></textarea><br>
+        <button type="submit">Kirim</button>
+    </form>
+    <h2>Daftar Catatan:</h2>
+    <ul id="note-list"></ul>
+
+    <script>
+        const form = document.getElementById('note-form');
+        const list = document.getElementById('note-list');
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const text = document.getElementById('note').value;
+            await fetch('/api/notes', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text})
+            });
+            loadNotes();
+        };
+
+        async function loadNotes() {
+            list.innerHTML = '';
+            const res = await fetch('/api/notes');
+            const notes = await res.json();
+            notes.forEach(note => {
+                const li = document.createElement('li');
+                li.textContent = note.text;
+                list.appendChild(li);
+            });
+        }
+
+        loadNotes();
+    </script>
+</body>
+</html>

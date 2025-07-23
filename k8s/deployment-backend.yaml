@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: susukadal/uas-backend:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: DB_HOST
+          value: mysql
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          value: 'P0o9i8u7'
+        - name: DB_NAME
+          value: notes
